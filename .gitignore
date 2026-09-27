@@ -1,0 +1,36 @@
+# === Wazuh generated files ===
+single-node/wazuh-certificates/
+single-node/wazuh-certificates-tool.log
+single-node/config/
+single-node/config*.yml
+*.pem
+*.key
+*.crt
+
+# === Docker ===
+docker-volumes/
+*.log
+
+# === Secrets / local config ===
+.env
+.env.*
+!.env.example
+
+# === OS noise ===
+.DS_Store
+Thumbs.db
+._*
+
+# === Editors ===
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# === Backups ===
+*.tar.gz
+*.tgz
+Wazuh-Backups/
+
+# === Notes / scratch ===
+notes/raw-outputs.md
