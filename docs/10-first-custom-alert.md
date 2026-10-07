@@ -212,10 +212,10 @@ aggregation chain.
 
 ## 10. Evidence
 
-The four screenshots and the 14-line raw alerts sample were not present
-in the local files available when this document was prepared. Add them
-to the paths below when available; no placeholder evidence files are
-included.
+The 14-line raw alerts sample is included in `configs/`. The four
+screenshots were not present in the local files available when this
+document was prepared; add them to the paths below when available. No
+placeholder screenshot files are included.
 
 | Artefact | Repository path |
 |---|---|
@@ -223,7 +223,7 @@ included.
 | Logtest screenshot | `screenshots/10-first-custom-alert/02-logtest.png` |
 | Restart screenshot | `screenshots/10-first-custom-alert/03-restart.png` |
 | Dashboard screenshot | `screenshots/10-first-custom-alert/04-dashboard.png` |
-| Raw alerts sample | `notes/10-first-custom-alert-alerts-sample.json` |
+| Raw alerts sample | `configs/checkpoint5-alerts-sample.json` |
 | Rule file | `/var/ossec/etc/rules/local_rules.xml` (manager container) |
 | Stock backup | `/var/ossec/etc/rules/local_rules.xml.bak` (manager container) |
 
