@@ -26,7 +26,7 @@ Both are fixed here, once, permanently.
 
 ```bash
 # 1. Create .wslconfig on the Windows side
-cat > /mnt/c/Users/kelvi_f/.wslconfig << 'EOF'
+cat > /mnt/c/Users/<username>/.wslconfig << 'EOF'
 [wsl2]
 memory=12GB
 processors=8
@@ -51,7 +51,7 @@ Reopen Ubuntu and verify:
 ```bash
 free -h
 sysctl vm.max_map_count
-cat /mnt/c/Users/kelvi_f/.wslconfig
+cat /mnt/c/Users/<username>/.wslconfig
 ```
 
 ## Output
