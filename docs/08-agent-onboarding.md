@@ -11,7 +11,7 @@ monitored assets.
 
 This is the milestone that turns a Wazuh deployment into a functioning SOC.
 
-## Environment
+## Environment — hostnames and TEST-NET-2 addresses are placeholders; substitute local lab values.
 
 | Component | Value |
 |-----------|-------|
@@ -135,104 +135,5 @@ Milestone 9 — Generate a real security event on the endpoint and triage
 it in the dashboard.
 
 → 09-first-alert.md
-
-
-**Save:** `Ctrl + O`, `Enter`, `Ctrl + X`.
-
----
-
-### ▶️ Step 2 — Verify
-
-ls -la docs/08-agent-onboarding.md
-wc -l docs/08-agent-onboarding.md
-
-
-**Paste the output.**
-
----
-
-### ⏸️ Pause After Step 2
-
-Once the doc exists, we commit and push it, then we're done with the recovery.
-
-**Create the doc. Save. Verify. Paste the output. Pause.**
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
