@@ -1,4 +1,4 @@
-# 08 — First Agent Onboarding (G575-SOC)
+# 08 — First Agent Onboarding (ubuntu-agent)
 
 **Date:** 2026-09-28
 **Status:** ✅ Complete
@@ -15,16 +15,16 @@ This is the milestone that turns a Wazuh deployment into a functioning SOC.
 
 | Component | Value |
 |-----------|-------|
-| Manager | Wazuh 4.9.0 on Yoga 9 (WSL 2 Ubuntu 22.04) |
-| Manager IP | 192.168.0.168 |
-| Endpoint | Lenovo G575 |
+| Manager | Wazuh 4.9.0 on Windows 11 host (WSL 2 Ubuntu 22.04) |
+| Manager IP | 198.51.100.10 |
+| Endpoint | Ubuntu endpoint |
 | Endpoint OS | Ubuntu 22.04.5 LTS |
-| Endpoint hostname | G575-SOC |
+| Endpoint hostname | ubuntu-agent |
 | Agent version | 4.9.0-1 (pinned to match Manager) |
 
 ## Commands
 
-On the G575 (endpoint):
+On the Ubuntu endpoint:
 
 ```bash
 # Import GPG key
@@ -38,7 +38,7 @@ echo "deb [signed-by=/usr/share/keyrings/wazuh.gpg] https://packages.wazuh.com/4
 
 # Install pinned version
 sudo apt update
-sudo WAZUH_MANAGER='192.168.0.168' apt install -y --allow-downgrades wazuh-agent=4.9.0-1
+sudo WAZUH_MANAGER='198.51.100.10' apt install -y --allow-downgrades wazuh-agent=4.9.0-1
 
 # Prevent auto-upgrade
 sudo apt-mark hold wazuh-agent
@@ -53,7 +53,7 @@ Agent appears in the Wazuh dashboard under Server management → Endpoints Summa
 
 ID	Name	Status
 000	single-node-wazuh.manager-1	Active
-001	G575-SOC	Active
+001	ubuntu-agent	Active
 The Overview page now shows Agents Summary: Active (1) instead of "No results."
 
 Screenshots
@@ -76,7 +76,7 @@ apt-mark hold is required to prevent future apt upgrade runs
 from pulling the agent back up and breaking the connection again.
 
 The endpoint's hostname becomes the agent name automatically. No
-extra configuration needed — naming the machine G575-SOC during
+extra configuration needed — naming the machine ubuntu-agent during
 Ubuntu install was sufficient.
 
 Gotcha 1 — Agent Version Newer Than Manager
@@ -123,7 +123,7 @@ sudo systemctl restart wazuh-agent
 Verification
 
 $ sudo grep "Connected to the server" /var/ossec/logs/ossec.log | tail -1
-2026/09/28 16:02:20 wazuh-agentd: INFO: (4102): Connected to the server ([192.168.0.168]:1514/tcp).
+2026/09/28 16:02:20 wazuh-agentd: INFO: (4102): Connected to the server ([198.51.100.10]:1514/tcp).
 
 $ dpkg -l wazuh-agent | tail -1
 hi  wazuh-agent  4.9.0-1  amd64  ...
