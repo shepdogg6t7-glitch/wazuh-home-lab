@@ -1,7 +1,7 @@
 # Checkpoint 6 — SSH Compromise Detection
 
 **Completed:** 2026-10-07
-**Analyst:** Kelvin
+**Analyst:** SOC analyst
 **Environment:** Wazuh 4.9.0 — single-node Docker stack
 **Manager host:** `manager-host` — Windows + WSL Ubuntu 22.04, Docker, IP `198.51.100.10`
 **Agent host:** `ubuntu-agent` — Ubuntu, IP `198.51.100.20`
@@ -105,7 +105,7 @@ Restarted manager with the new rule. `wazuh-logtest` started cleanly with no err
 Feeding a failed-login line:
 
 ```
-Jan  1 00:00:00 yoga9 sshd[1]: Failed password for invalid user baduser1 from 203.0.113.99 port 51000 ssh2
+Jan  1 00:00:00 ubuntu-agent sshd[1]: Failed password for invalid user baduser1 from 203.0.113.99 port 51000 ssh2
 ```
 
 Clean result — no error, `5710` matched as expected.
@@ -130,7 +130,7 @@ Result: `Up About a minute` — clean start, rule loaded.
 
 **Prerequisite:** a test user on the agent with a known password.
 
-On the G575:
+On the ubuntu-agent:
 
 ```bash
 sudo useradd -m test-user
