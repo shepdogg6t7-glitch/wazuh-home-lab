@@ -136,6 +136,6 @@ deliberate choice.
 
 ## Next
 
-Milestone 7 — Onboard the first Wazuh agent (the Lenovo G575).
+Milestone 7 — Onboard the first Wazuh agent (the Ubuntu endpoint).
 
 → [08-agent-onboarding.md](08-agent-onboarding.md)
