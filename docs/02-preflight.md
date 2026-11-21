@@ -15,7 +15,7 @@ container startup failures.
 
 ## Environment
 
-- **Host:** Lenovo Yoga 9, Intel Core Ultra 7 155H (16 cores / 22 threads), 16 GB RAM
+- **Host:** Windows laptop, 16 GB RAM
 - **OS:** Windows 11 + WSL 2 (Ubuntu 22.04)
 - **Container runtime:** Docker Desktop 29.8.0 with WSL integration
 - **Backup target:** `G:\Wazuh-Backups\` (2 TB WD My Passport, NTFS)
@@ -71,7 +71,7 @@ See `notes/raw-outputs.md` for the full transcript. Summary:
 | Folder structure | `Wazuh-Backups`, `Wazuh-Archives`, `Victim-Logs` created | ✅ |
 | Write test | `WRITE OK` | ✅ |
 | Docker | `Docker version 29.8.0`, Compose v5.5.1 | ✅ (after fix below) |
-| Docker group | `kelvi_f adm cdrom sudo dip plugdev docker` | ✅ |
+| Docker group | `<username> adm cdrom sudo dip plugdev docker` | ✅ |
 
 ## What I Learned
 
