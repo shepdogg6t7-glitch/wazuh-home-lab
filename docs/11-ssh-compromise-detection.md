@@ -3,9 +3,9 @@
 **Completed:** 2026-10-07
 **Analyst:** Kelvin
 **Environment:** Wazuh 4.9.0 — single-node Docker stack
-**Manager host:** `LeShepVoPro9` — Windows + WSL Ubuntu 22.04, Docker, IP `192.168.0.168`
-**Agent host:** `G575-SOC` — Ubuntu, IP `192.168.0.189`
-**Depends on:** Checkpoint 5 — rule `100100` (SSH brute force)
+**Manager host:** `manager-host` — Windows + WSL Ubuntu 22.04, Docker, IP `198.51.100.10`
+**Agent host:** `ubuntu-agent` — Ubuntu, IP `198.51.100.20`
+**Depends on:** Checkpoint 5 — rule `100100` (SSH brute force). **Redaction:** Hostnames and TEST-NET-2 addresses below are placeholders; substitute local values when reproducing. Set the throwaway test-account password interactively; no password is recorded here.
 
 ---
 
@@ -134,15 +134,15 @@ On the G575:
 
 ```bash
 sudo useradd -m chk6test
-echo 'chk6test:TestPass123!' | sudo chpasswd
+sudo passwd chk6test
 ```
 
-**Trigger from the manager host (`192.168.0.168`) — burst first, then success:**
+**Trigger from the manager host (`198.51.100.10`) — burst first, then success:**
 
 ```bash
 # 1. Burst — 8 failed logins
 for i in $(seq 1 8); do
-  sshpass -p 'wrongpw' ssh baduser$i@192.168.0.189 \
+  sshpass -p 'wrongpw' ssh baduser$i@198.51.100.20 \
     -o StrictHostKeyChecking=no \
     -o PreferredAuthentications=password \
     -o PubkeyAuthentication=no \
@@ -156,7 +156,7 @@ wait
 sleep 10
 
 # 3. Successful login — same source IP
-sshpass -p 'TestPass123!' ssh chk6test@192.168.0.189 \
+ssh chk6test@198.51.100.20 \
   -o StrictHostKeyChecking=no \
   -o PreferredAuthentications=password \
   -o PubkeyAuthentication=no \
@@ -170,11 +170,11 @@ sshpass -p 'TestPass123!' ssh chk6test@192.168.0.189 \
 ```json
 {"timestamp":"2026-10-07T17:06:42.815+0000",
  "rule":{"level":12,
-         "description":"SSH brute force: 5+ invalid-user logins in 60s from 192.168.0.168",
+         "description":"SSH brute force: 5+ invalid-user logins in 60s from 198.51.100.10",
          "id":"100100",
          "firedtimes":4},
- "agent":{"id":"001","name":"G575-SOC","ip":"192.168.0.189"},
- "data":{"srcip":"192.168.0.168","srcuser":"baduser4"}}
+ "agent":{"id":"001","name":"ubuntu-agent","ip":"198.51.100.20"},
+ "data":{"srcip":"198.51.100.10","srcuser":"baduser4"}}
 ```
 
 `100101` fired at level 13 on the successful login:
@@ -182,12 +182,12 @@ sshpass -p 'TestPass123!' ssh chk6test@192.168.0.189 \
 ```json
 {"timestamp":"2026-10-07T17:07:16.732+0000",
  "rule":{"level":13,
-         "description":"Possible SSH compromise: successful login from 192.168.0.168 after brute-force burst",
+         "description":"Possible SSH compromise: successful login from 198.51.100.10 after brute-force burst",
          "id":"100101",
          "frequency":2,
          "firedtimes":1},
- "agent":{"id":"001","name":"G575-SOC","ip":"192.168.0.189"},
- "data":{"srcip":"192.168.0.168","srcport":"64698","dstuser":"chk6test"}}
+ "agent":{"id":"001","name":"ubuntu-agent","ip":"198.51.100.20"},
+ "data":{"srcip":"198.51.100.10","srcport":"64698","dstuser":"chk6test"}}
 ```
 
 **Full alert sample:** `configs/checkpoint6-alerts-sample.json` (2 lines)
@@ -200,8 +200,8 @@ Filter: `rule.id` **is** `100101`, Last 1 hour.
 
 | timestamp | agent.name | rule.description | rule.level | rule.id |
 |---|---|---|---|---|
-| Oct 7, 2026 @ 12:07:16.753 | G575-SOC | Possible SSH compromise: successful login from 192.168.0.168 after brute-force burst | 13 | **100101** |
-| Oct 7, 2026 @ 12:07:16.732 | G575-SOC | Possible SSH compromise: successful login from 192.168.0.168 after brute-force burst | 13 | **100101** |
+| Oct 7, 2026 @ 12:07:16.753 | ubuntu-agent | Possible SSH compromise: successful login from 198.51.100.10 after brute-force burst | 13 | **100101** |
+| Oct 7, 2026 @ 12:07:16.732 | ubuntu-agent | Possible SSH compromise: successful login from 198.51.100.10 after brute-force burst | 13 | **100101** |
 
 **Screenshot:** `screenshots/11-ssh-compromise-detection/01-dashboard-100101.png`
 
@@ -209,30 +209,30 @@ Filter: `rule.id` **is** `100101`, Last 1 hour.
 
 ## 8. Agent-side log evidence
 
-From `/var/log/auth.log` on G575-SOC — the full sequence:
+From `/var/log/auth.log` on ubuntu-agent — the full sequence:
 
 ```
 # Burst — 8 invalid-user attempts (12:06:39–12:06:41)
-Oct 7 12:06:39 G575-SOC sshd[11555]: Invalid user baduser1 from 192.168.0.168 port 64708
-Oct 7 12:06:39 G575-SOC sshd[11557]: Invalid user baduser2 from 192.168.0.168 port 64718
-Oct 7 12:06:40 G575-SOC sshd[11559]: Invalid user baduser3 from 192.168.0.168 port 64720
-Oct 7 12:06:40 G575-SOC sshd[11561]: Invalid user baduser4 from 192.168.0.168 port 64732
-Oct 7 12:06:40 G575-SOC sshd[11563]: Invalid user baduser5 from 192.168.0.168 port 64744
-Oct 7 12:06:41 G575-SOC sshd[11565]: Invalid user baduser6 from 192.168.0.168 port 64750
-Oct 7 12:06:41 G575-SOC sshd[11567]: Invalid user baduser7 from 192.168.0.168 port 64752
-Oct 7 12:06:41 G575-SOC sshd[11569]: Invalid user baduser8 from 192.168.0.168 port 64764
+Oct 7 12:06:39 ubuntu-agent sshd[11555]: Invalid user baduser1 from 198.51.100.10 port 64708
+Oct 7 12:06:39 ubuntu-agent sshd[11557]: Invalid user baduser2 from 198.51.100.10 port 64718
+Oct 7 12:06:40 ubuntu-agent sshd[11559]: Invalid user baduser3 from 198.51.100.10 port 64720
+Oct 7 12:06:40 ubuntu-agent sshd[11561]: Invalid user baduser4 from 198.51.100.10 port 64732
+Oct 7 12:06:40 ubuntu-agent sshd[11563]: Invalid user baduser5 from 198.51.100.10 port 64744
+Oct 7 12:06:41 ubuntu-agent sshd[11565]: Invalid user baduser6 from 198.51.100.10 port 64750
+Oct 7 12:06:41 ubuntu-agent sshd[11567]: Invalid user baduser7 from 198.51.100.10 port 64752
+Oct 7 12:06:41 ubuntu-agent sshd[11569]: Invalid user baduser8 from 198.51.100.10 port 64764
 
 # Failed passwords — matching rule 5710
-Oct 7 12:06:42 G575-SOC sshd[11555]: Failed password for invalid user baduser1 from 192.168.0.168 port 64708 ssh2
-Oct 7 12:06:42 G575-SOC sshd[11557]: Failed password for invalid user baduser2 from 192.168.0.168 port 64718 ssh2
+Oct 7 12:06:42 ubuntu-agent sshd[11555]: Failed password for invalid user baduser1 from 198.51.100.10 port 64708 ssh2
+Oct 7 12:06:42 ubuntu-agent sshd[11557]: Failed password for invalid user baduser2 from 198.51.100.10 port 64718 ssh2
 ...
-Oct 7 12:06:43 G575-SOC sshd[11569]: Failed password for invalid user baduser8 from 192.168.0.168 port 64764 ssh2
+Oct 7 12:06:43 ubuntu-agent sshd[11569]: Failed password for invalid user baduser8 from 198.51.100.10 port 64764 ssh2
 
 # Success — the login that triggers rule 100101
-Oct 7 12:07:15 G575-SOC sshd[11574]: Accepted password for chk6test from 192.168.0.168 port 64698 ssh2
-Oct 7 12:07:15 G575-SOC sshd[11574]: pam_unix(sshd:session): session opened for user chk6test(uid=1001)
-Oct 7 12:07:16 G575-SOC systemd-logind[458]: New session 18 of user chk6test.
-Oct 7 12:07:17 G575-SOC sshd[11574]: pam_unix(sshd:session): session closed for user chk6test
+Oct 7 12:07:15 ubuntu-agent sshd[11574]: Accepted password for chk6test from 198.51.100.10 port 64698 ssh2
+Oct 7 12:07:15 ubuntu-agent sshd[11574]: pam_unix(sshd:session): session opened for user chk6test(uid=1001)
+Oct 7 12:07:16 ubuntu-agent systemd-logind[458]: New session 18 of user chk6test.
+Oct 7 12:07:17 ubuntu-agent sshd[11574]: pam_unix(sshd:session): session closed for user chk6test
 ```
 
 ---
@@ -241,7 +241,7 @@ Oct 7 12:07:17 G575-SOC sshd[11574]: pam_unix(sshd:session): session closed for 
 
 | Host | Time shown | Zone |
 |---|---|---|
-| G575-SOC (agent) | `12:06–12:07` | CDT (UTC−5) |
+| ubuntu-agent (agent) | `12:06–12:07` | CDT (UTC−5) |
 | Manager (alerts.json) | `17:06–17:07` | UTC |
 
 **Same events, consistent 5-hour offset.** Wazuh's correlation engine uses arrival time at the manager for window calculations, so `timeframe` rules work correctly regardless of the agent's local clock. But when correlating agent logs with manager alerts manually, apply the 5-hour offset.
@@ -293,7 +293,7 @@ Narrative: **reconnaissance → attempted intrusion → probable compromise.**
 | Rule file | `/var/ossec/etc/rules/local_rules.xml` (manager container) |
 | Alert sample (`100101`) | `configs/checkpoint6-alerts-sample.json` |
 | Dashboard screenshot | `screenshots/11-ssh-compromise-detection/01-dashboard-100101.png` |
-| Agent log excerpt | `/var/log/auth.log` on G575-SOC |
+| Agent log excerpt | `/var/log/auth.log` on ubuntu-agent |
 | Trigger command | §6, bash loop |
 
 ---
