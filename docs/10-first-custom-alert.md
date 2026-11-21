@@ -212,10 +212,7 @@ aggregation chain.
 
 ## 10. Evidence
 
-The 14-line raw alerts sample is included in `configs/`. The four
-screenshots were not present in the local files available when this
-document was prepared; add them to the paths below when available. No
-placeholder screenshot files are included.
+The 14-line raw alerts sample is included in `configs/`. The four screenshots are present in `screenshots/10-first-custom-alert/`:
 
 | Artefact | Repository path |
 |---|---|

@@ -110,7 +110,7 @@ Clean Compose shutdown on first try.
 
 ## Screenshot
 
-- `screenshots/03-resource-management/03-baseline-after-cleanup_2026-09-27.png`
+Screenshots not captured for this milestone. The command output in §Output is the primary evidence.
 
 ## Next
 

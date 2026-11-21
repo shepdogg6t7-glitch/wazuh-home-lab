@@ -103,8 +103,7 @@ work.
 
 ## Screenshot
 
-- `screenshots/02-kernel-and-wsl/02-memory-and-kernel-post-fix_2026-09-27.png`
-- `screenshots/02-kernel-and-wsl/02-wslconfig-file_2026-09-27.png`
+Screenshots not captured for this milestone. The command output in §Output is the primary evidence.
 
 ## Next
 

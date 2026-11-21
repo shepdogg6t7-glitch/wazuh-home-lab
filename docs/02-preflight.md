@@ -126,8 +126,7 @@ Use "All Files" mode, or edit the file in place with `Ctrl+S`.
 
 ## Screenshot
 
-- `screenshots/01-preflight/01-preflight_memory-and-kernel_2026-09-27.png`
-- `screenshots/01-preflight/01-preflight_write-ok_2026-09-27.png`
+Screenshots not captured for this milestone. The command output in §Output is the primary evidence.
 
 ## Next
 
