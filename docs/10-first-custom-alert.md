@@ -186,11 +186,11 @@ aggregation chain.
 | Issue | Resolution |
 |---|---|
 | First draft used `if_matched_sid` `5712` | Confirmed `5712` is the built-in brute-force rule; reparented to `5710` with a tighter window to make `100100` distinct. |
-| `wazuh-manager` inactive on G575 | Confirmed with `systemctl is-active` that G575 is agent-only; the manager runs in Docker on the Yoga 9. |
-| SSH from G575 to Yoga 9 reset repeatedly | Used direct keyboard and Docker access instead; SSH was not required for the checkpoint. |
+| `wazuh-manager` inactive on ubuntu-agent | Confirmed with `systemctl is-active` that ubuntu-agent is agent-only; the manager runs in Docker on the wazuh-manager. |
+| SSH from ubuntu-agent to wazuh-manager reset repeatedly | Used direct keyboard and Docker access instead; SSH was not required for the checkpoint. |
 | Rule fired but dashboard showed nothing | `_cat/indices/wazuh-alerts-*` returned empty while Filebeat-to-Indexer ingestion was stalled. It recovered after a short wait; the root cause was not determined. |
 | `docker exec -it ... > file` produced an empty file | Dropped `-t`; TTY allocation can corrupt redirected output. Use `docker exec -i` or plain `docker exec` for output capture. |
-| OpenSSH was installed on G575 as a side task | It was not required for the checkpoint but later served as the remote source for the first confirmed firing. |
+| OpenSSH was installed on ubuntu-agent as a side task | It was not required for the checkpoint but later served as the remote source for the first confirmed firing. |
 
 ## 9. Lessons Learned
 
