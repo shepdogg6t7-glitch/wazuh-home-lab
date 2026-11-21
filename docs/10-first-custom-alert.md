@@ -2,18 +2,18 @@
 
 **Completed:** 2026-10-07
 
-**Analyst:** Kelvin
+**Analyst:** SOC analyst
 
-**Environment:** Wazuh 4.9.0 — single-node Docker stack
+**Environment:** Wazuh 4.9.0 — single-node Docker stack. Hostnames and TEST-NET-2 IP addresses below are placeholders; substitute your own local lab values.
 
-**Manager host:** `LeShepVoPro9` — Windows + WSL Ubuntu 22.04, Docker, IP `192.168.0.168`
+**Manager host:** `wazuh-manager` — Windows + WSL Ubuntu 22.04, Docker, IP `198.51.100.10`
 
-**Agent host:** `G575-SOC` — Ubuntu, IP `192.168.0.189`
+**Agent host:** `ubuntu-agent` — Ubuntu, IP `198.51.100.20`
 
 ## Objective
 
 Write, validate, deploy, and trigger a custom Wazuh rule detecting SSH
-brute-force attempts against the G575-SOC agent, and confirm the alert
+brute-force attempts against the ubuntu-agent agent, and confirm the alert
 appears in the dashboard as rule `100100`.
 
 ## Definition of Done
@@ -28,7 +28,7 @@ appears in the dashboard as rule `100100`.
 ## 1. Architecture
 
 ```text
-G575-SOC — 192.168.0.189                 LeShepVoPro9 — 192.168.0.168
+ubuntu-agent — 198.51.100.20                 wazuh-manager — 198.51.100.10
 Ubuntu — Wazuh agent                     Windows + WSL Ubuntu 22.04
                                         Docker: single-node-wazuh.manager
 /var/log/auth.log ───── TCP 1514 ─────► /var/ossec/etc/rules/
@@ -114,8 +114,8 @@ The manager was up after restart and reloaded the rule without error.
 
 ## 6. DoD #4 — Real Trigger
 
-From the manager host (`192.168.0.168`) against the agent
-(`192.168.0.189`):
+From the manager host (`198.51.100.10`) against the agent
+(`198.51.100.20`):
 
 ```bash
 for i in $(seq 1 8); do
@@ -124,7 +124,7 @@ for i in $(seq 1 8); do
        -o PubkeyAuthentication=no \
        -o ConnectTimeout=3 \
        -o NumberOfPasswordPrompts=1 \
-       baduser$i@192.168.0.189 </dev/null >/dev/null 2>&1) &
+       baduser$i@198.51.100.20 </dev/null >/dev/null 2>&1) &
   sleep 0.3
 done
 wait
@@ -132,7 +132,7 @@ wait
 
 Eight invalid-user attempts reached the agent's `/var/log/auth.log`
 within approximately three seconds. The agent forwarded them to the
-manager at `192.168.0.168:1514/tcp`.
+manager at `198.51.100.10:1514/tcp`.
 
 The raw alert log contained 14 matches for rule `100100`:
 
@@ -149,7 +149,7 @@ Sample alert:
   "timestamp": "2026-10-07T03:39:38.066+0000",
   "rule": {
     "level": 12,
-    "description": "SSH brute force: 5+ invalid-user logins in 60s from 192.168.0.168",
+    "description": "SSH brute force: 5+ invalid-user logins in 60s from 198.51.100.10",
     "id": "100100",
     "mitre": {
       "id": ["T1110.001"],
@@ -161,11 +161,11 @@ Sample alert:
   },
   "agent": {
     "id": "001",
-    "name": "G575-SOC",
-    "ip": "192.168.0.189"
+    "name": "ubuntu-agent",
+    "ip": "198.51.100.20"
   },
   "data": {
-    "srcip": "192.168.0.168",
+    "srcip": "198.51.100.10",
     "srcport": "64744",
     "srcuser": "baduser4"
   }
@@ -176,8 +176,8 @@ Sample alert:
 
 In **Wazuh → Threat Hunting → Events**, the filter was set to
 `rule.id` **is** `100100`, sorted newest first. The dashboard showed
-rule `100100` at level 12 for agent `G575-SOC` (`192.168.0.189`), with
-the description identifying source `192.168.0.168`. Parent `5710`
+rule `100100` at level 12 for agent `ubuntu-agent` (`198.51.100.20`), with
+the description identifying source `198.51.100.10`. Parent `5710`
 events (level 5) appeared in the same time window, showing the
 aggregation chain.
 
