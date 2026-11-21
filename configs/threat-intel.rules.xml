@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<group name="threat-intel,attack,">
+  <rule id="200100" level="12" frequency="1">
+    <if_sid>1</if_sid>
+    <list field="srcip" lookup="address_match">threat-intel-ips</list>
+    <description>Connection from known-bad IP $(srcip) on threat intel blocklist</description>
+    <mitre>
+      <id>T1194</id>
+    </mitre>
+  </rule>
+</group>

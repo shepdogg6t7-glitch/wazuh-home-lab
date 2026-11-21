@@ -1,0 +1,8 @@
+<!-- threat-intel-list-fragment.xml -->
+<!-- Paste this <list> block into /var/ossec/etc/ossec.conf inside the <ruleset> block, -->
+<!-- alongside any existing <list> entries. Then restart the Wazuh manager. -->
+
+<list>
+  <field name="srcip">threat-intel-ips</field>
+  <check_from>rule</check_from>
+</list>
