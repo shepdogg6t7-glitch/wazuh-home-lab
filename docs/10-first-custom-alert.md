@@ -13,7 +13,7 @@
 ## Objective
 
 Write, validate, deploy, and trigger a custom Wazuh rule detecting SSH
-brute-force attempts against the ubuntu-agent agent, and confirm the alert
+brute-force attempts against the Ubuntu endpoint, and confirm the alert
 appears in the dashboard as rule `100100`.
 
 ## Definition of Done
