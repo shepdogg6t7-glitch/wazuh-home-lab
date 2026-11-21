@@ -23,7 +23,7 @@ appears in the dashboard as rule `100100`.
 | 1 | Custom rule written in `local_rules.xml` on the manager | Complete | Rule file screenshot |
 | 2 | Validated with `wazuh-logtest` | Complete | Logtest screenshot |
 | 3 | Manager restarted cleanly | Complete | Restart screenshot |
-| 4 | Triggered for real and visible in the dashboard as rule `100100` | Complete | Dashboard screenshot and raw alert sample |
+| 4 | Triggered for real and visible in the dashboard as rule `100100` | Complete | Dashboard evidence and raw alert sample |
 
 ## 1. Architecture
 
