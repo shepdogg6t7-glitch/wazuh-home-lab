@@ -90,7 +90,7 @@ by `root:root`. Your normal user cannot even list the directory.
 
 ```bash
 sudo chmod 750 config/wazuh_indexer_ssl_certs/
-sudo chown -R kelvi_f:kelvi_f config/wazuh_indexer_ssl_certs/
+sudo chown -R <username>:<username> config/wazuh_indexer_ssl_certs/
 ```
 
 **Why this is safe:** `chmod 750` opens the directory for the owner
