@@ -23,7 +23,7 @@ Write, validate, deploy, and trigger a **second custom Wazuh rule** — `100101`
 | 2 | Validated — manager loaded with no parse errors | ✅ | §4, `wazuh-logtest` clean start |
 | 3 | Manager restarted cleanly | ✅ | §5, `docker ps` `Up` |
 | 4 | Triggered for real — `100100` then `100101` fired | ✅ | §6, `alerts.json` grep |
-| 5 | Visible in dashboard as `100101` at level 13 | ✅ | §7, `screenshots/11-ssh-compromise-detection/01-dashboard-100101.png` |
+| 5 | Visible in dashboard as `100101` at level 13 | ✅ | §7, dashboard evidence summary |
 
 ---
 
@@ -203,7 +203,7 @@ Filter: `rule.id` **is** `100101`, Last 1 hour.
 | Oct 7, 2026 @ 12:07:16.753 | ubuntu-agent | Possible SSH compromise: successful login from 198.51.100.10 after brute-force burst | 13 | **100101** |
 | Oct 7, 2026 @ 12:07:16.732 | ubuntu-agent | Possible SSH compromise: successful login from 198.51.100.10 after brute-force burst | 13 | **100101** |
 
-**Screenshot:** `screenshots/11-ssh-compromise-detection/01-dashboard-100101.png`
+**Evidence note:** The original screenshot is omitted because it exposed unredacted lab identifiers; the alert details are summarized above.
 
 ---
 
@@ -292,7 +292,7 @@ Narrative: **reconnaissance → attempted intrusion → probable compromise.**
 |---|---|
 | Rule file | `/var/ossec/etc/rules/local_rules.xml` (manager container) |
 | Alert sample (`100101`) | `configs/checkpoint6-alerts-sample.json` |
-| Dashboard screenshot | `screenshots/11-ssh-compromise-detection/01-dashboard-100101.png` |
+| Dashboard evidence | §7 summary; original image omitted to avoid exposing identifiers |
 | Agent log excerpt | `/var/log/auth.log` on ubuntu-agent |
 | Trigger command | §6, bash loop |
 
