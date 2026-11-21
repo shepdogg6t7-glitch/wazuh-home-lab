@@ -133,8 +133,8 @@ Result: `Up About a minute` — clean start, rule loaded.
 On the G575:
 
 ```bash
-sudo useradd -m chk6test
-sudo passwd chk6test
+sudo useradd -m test-user
+sudo passwd test-user
 ```
 
 **Trigger from the manager host (`198.51.100.10`) — burst first, then success:**
@@ -156,7 +156,7 @@ wait
 sleep 10
 
 # 3. Successful login — same source IP
-ssh chk6test@198.51.100.20 \
+ssh test-user@198.51.100.20 \
   -o StrictHostKeyChecking=no \
   -o PreferredAuthentications=password \
   -o PubkeyAuthentication=no \
@@ -187,7 +187,7 @@ ssh chk6test@198.51.100.20 \
          "frequency":2,
          "firedtimes":1},
  "agent":{"id":"001","name":"ubuntu-agent","ip":"198.51.100.20"},
- "data":{"srcip":"198.51.100.10","srcport":"64698","dstuser":"chk6test"}}
+ "data":{"srcip":"198.51.100.10","srcport":"64698","dstuser":"test-user"}}
 ```
 
 **Full alert sample:** `configs/checkpoint6-alerts-sample.json` (2 lines)
@@ -229,10 +229,10 @@ Oct 7 12:06:42 ubuntu-agent sshd[11557]: Failed password for invalid user baduse
 Oct 7 12:06:43 ubuntu-agent sshd[11569]: Failed password for invalid user baduser8 from 198.51.100.10 port 64764 ssh2
 
 # Success — the login that triggers rule 100101
-Oct 7 12:07:15 ubuntu-agent sshd[11574]: Accepted password for chk6test from 198.51.100.10 port 64698 ssh2
-Oct 7 12:07:15 ubuntu-agent sshd[11574]: pam_unix(sshd:session): session opened for user chk6test(uid=1001)
-Oct 7 12:07:16 ubuntu-agent systemd-logind[458]: New session 18 of user chk6test.
-Oct 7 12:07:17 ubuntu-agent sshd[11574]: pam_unix(sshd:session): session closed for user chk6test
+Oct 7 12:07:15 ubuntu-agent sshd[11574]: Accepted password for test-user from 198.51.100.10 port 64698 ssh2
+Oct 7 12:07:15 ubuntu-agent sshd[11574]: pam_unix(sshd:session): session opened for user test-user(uid=1001)
+Oct 7 12:07:16 ubuntu-agent systemd-logind[458]: New session 18 of user test-user.
+Oct 7 12:07:17 ubuntu-agent sshd[11574]: pam_unix(sshd:session): session closed for user test-user
 ```
 
 ---
@@ -302,22 +302,3 @@ Narrative: **reconnaissance → attempted intrusion → probable compromise.**
 
 ---
 
-## How to finish this
-
-1. **Save the file** as `docs/11-ssh-compromise-detection.md` in your repo clone:
-   - **In WSL:** `nano "/mnt/c/Users/kelvi_f/Downloads/wazuh-home-lab-checkpoint5/docs/11-ssh-compromise-detection.md"` — paste, `Ctrl+O`, Enter, `Ctrl+X`
-   - **In VSCode:** open the file, paste, save
-   - **In PowerShell:** `notepad "C:\Users\kelvi_f\Downloads\wazuh-home-lab-checkpoint5\docs\11-ssh-compromise-detection.md"` — paste, save
-
-2. **Stage, commit, push:**
-   ```powershell
-   cd "C:\Users\kelvi_f\Downloads\wazuh-home-lab-checkpoint5"
-   git add docs/11-ssh-compromise-detection.md
-   git status
-   git commit -m "docs: add checkpoint 6 write-up — SSH compromise detection (rule 100101)"
-   git push origin main
-   ```
-
-3. **Then Checkpoint 6 is fully closed** — evidence + write-up both on GitHub.
-
-Paste the `git status` before committing if you want a sanity check. Otherwise — that's the doc.
