@@ -95,7 +95,7 @@ docker exec -it single-node-wazuh.manager-1 \
 Test input:
 
 ```text
-Jan  1 00:00:00 yoga9 sshd[1]: Failed password for invalid user admin from 203.0.113.66 port 51000 ssh2
+Jan  1 00:00:00 ubuntu-agent sshd[1]: Failed password for invalid user admin from 203.0.113.66 port 51000 ssh2
 ```
 
 The test matched parent rule `5710` (level 5), then generated custom
